@@ -1,0 +1,312 @@
+Hoomanian
+hoomanian
+Online
+
+Hoomanian — Yesterday at 10:09 PM
+
+
+
+
+#include <windows.h>
+include <unicodew.h>
+Expand
+code_v1.txt
+4 KB
+Hoomanian — Yesterday at 10:22 PM
+
+#include <windows.h>
+include <unicodew.h>
+include <tchar.h>
+include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+// Define a struct to hold the properties of a GUI element
+struct GuiElement {
+    string text;
+    int x, y, width, height;
+   WND hwnd; // handle of the element's parent window
+};
+
+// Function to create a new GUI element with the given properties
+GuiElement CreateGuiElement(string text, int x, int y, int width, int height) {
+    // Allocate memory for the element's properties and handle
+    GuiElement element;
+    element.text = text;
+    element.x = x;
+    element.y = y;
+    element.width = width;
+    element.height = height;
+    element.hwnd = NULL; // not yet assigned a parent window handle
+
+    return element;
+}
+
+// Function to add the given GUI element to the desktop window
+void AddGuiElement(GuiElement& element) {
+    // Create a new window for the element's parent, if it doesn't already have one
+    HWND hwnd = FindWindow(L"Desktop", NULL);
+    if (hwnd == NULL) {
+        hwnd = CreateWindowEx(NULL, L"Desktop", WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, NULL, NULL, NULL, NULL);
+    }
+
+    // Create a new window for the element itself, and assign it to the parent handle
+    element.hwnd = CreateWindowEx(NULL, L"Element", WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, hwnd, NULL, NULL, NULL);
+    // Set the element's text and position
+    SetWindowText(element.hwnd, element.text.c_str());
+    MoveWindow(element.hwnd, element.x, element.y, element.width, element.height);
+}
+
+// Function to handle a button click event
+void HandleButtonClick(string text) {
+    // Perform some action based on the clicked button's text
+    if (text == "Button 1") {
+        cout << "Button 1 was clicked!" << endl;
+    } else if (text == "Button 2") {
+        cout << "Button 2 was clicked!" << endl;
+    } else if (text == "Button 3") {
+        cout << "Button 3 was clicked!" << endl;
+    }
+}
+
+// Function to retrieve the text of a specific window
+string GetWindowText(WND hwnd) {
+    // Allocate memory for the text and get it from the window
+    string text;
+    GetWindowTextA(hwnd, text.c_str(), 256);
+
+    return text;
+}
+
+// Function to retrieve the handle of a specific window's parent
+WND GetParentWindow(WND hwnd) {
+    // Allocate memory for the parent handle and get it from the window
+    WND parent = FindWindowEx(NULL, L"Desktop", NULL);
+    if (parent == NULL) {
+        parent = GetParent(hwnd);
+    }
+
+    return parent;
+}
+
+// Function to retrieve the handle of a specific window's child
+WND GetChildWindow(WND hwnd, string text) {
+    // Allocate memory for the child handle and get it from the window
+    WND child = FindWindowEx(NULL, L"Element", NULL);
+    if (child == NULL) {
+        child = GetChild(hwnd, text.c_str());
+    }
+
+    return child;
+}
+
+// Function to retrieve the handle of a specific window's sibling
+WND GetSiblingWindow(WND hwnd, string text) {
+    // Allocate memory for the sibling handle and get it from the window
+    WND sibling = FindWindowEx(NULL, L"Element", NULL);
+    if (sibling == NULL) {
+        sibling = GetSibling(hwnd, text.c_str());
+    }
+
+    return sibling;
+}
+
+... (92 lines left)
+Collapse
+code_v2.txt
+7 KB
+﻿
+
+#include <windows.h>
+include <unicodew.h>
+include <tchar.h>
+include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+// Define a struct to hold the properties of a GUI element
+struct GuiElement {
+    string text;
+    int x, y, width, height;
+   WND hwnd; // handle of the element's parent window
+};
+
+// Function to create a new GUI element with the given properties
+GuiElement CreateGuiElement(string text, int x, int y, int width, int height) {
+    // Allocate memory for the element's properties and handle
+    GuiElement element;
+    element.text = text;
+    element.x = x;
+    element.y = y;
+    element.width = width;
+    element.height = height;
+    element.hwnd = NULL; // not yet assigned a parent window handle
+
+    return element;
+}
+
+// Function to add the given GUI element to the desktop window
+void AddGuiElement(GuiElement& element) {
+    // Create a new window for the element's parent, if it doesn't already have one
+    HWND hwnd = FindWindow(L"Desktop", NULL);
+    if (hwnd == NULL) {
+        hwnd = CreateWindowEx(NULL, L"Desktop", WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, NULL, NULL, NULL, NULL);
+    }
+
+    // Create a new window for the element itself, and assign it to the parent handle
+    element.hwnd = CreateWindowEx(NULL, L"Element", WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, hwnd, NULL, NULL, NULL);
+    // Set the element's text and position
+    SetWindowText(element.hwnd, element.text.c_str());
+    MoveWindow(element.hwnd, element.x, element.y, element.width, element.height);
+}
+
+// Function to handle a button click event
+void HandleButtonClick(string text) {
+    // Perform some action based on the clicked button's text
+    if (text == "Button 1") {
+        cout << "Button 1 was clicked!" << endl;
+    } else if (text == "Button 2") {
+        cout << "Button 2 was clicked!" << endl;
+    } else if (text == "Button 3") {
+        cout << "Button 3 was clicked!" << endl;
+    }
+}
+
+// Function to retrieve the text of a specific window
+string GetWindowText(WND hwnd) {
+    // Allocate memory for the text and get it from the window
+    string text;
+    GetWindowTextA(hwnd, text.c_str(), 256);
+
+    return text;
+}
+
+// Function to retrieve the handle of a specific window's parent
+WND GetParentWindow(WND hwnd) {
+    // Allocate memory for the parent handle and get it from the window
+    WND parent = FindWindowEx(NULL, L"Desktop", NULL);
+    if (parent == NULL) {
+        parent = GetParent(hwnd);
+    }
+
+    return parent;
+}
+
+// Function to retrieve the handle of a specific window's child
+WND GetChildWindow(WND hwnd, string text) {
+    // Allocate memory for the child handle and get it from the window
+    WND child = FindWindowEx(NULL, L"Element", NULL);
+    if (child == NULL) {
+        child = GetChild(hwnd, text.c_str());
+    }
+
+    return child;
+}
+
+// Function to retrieve the handle of a specific window's sibling
+WND GetSiblingWindow(WND hwnd, string text) {
+    // Allocate memory for the sibling handle and get it from the window
+    WND sibling = FindWindowEx(NULL, L"Element", NULL);
+    if (sibling == NULL) {
+        sibling = GetSibling(hwnd, text.c_str());
+    }
+
+    return sibling;
+}
+
+// Function to retrieve the handle of a specific window's parent's child
+WND GetParentChildWindow(WND hwnd, string text) {
+    // Allocate memory for the child handle and get it from the window's parent
+    WND parent = GetParentWindow(GetParentWindow(hwnd));
+    if (parent == NULL) {
+        parent = FindWindowEx(NULL, L"Desktop", NULL);
+    }
+    WND child = GetChildWindow(parent, text.c_str());
+
+    return child;
+}
+
+// Function to retrieve the handle of a specific window's parent's sibling
+WND GetParentSiblingWindow(WND hwnd, string text) {
+    // Allocate memory for the sibling handle and get it from the window's parent
+    WND parent = GetParentWindow(GetParentWindow(hwnd));
+    if (parent == NULL) {
+        parent = FindWindowEx(NULL, L"Desktop", NULL);
+    }
+    WND sibling = GetSiblingWindow(parent, text.c_str());
+
+    return sibling;
+}
+
+// Function to retrieve the handle of a specific window's child's parent
+WND GetChildParentWindow(WND hwnd, string text) {
+    // Allocate memory for the parent handle and get it from the window's child
+    WND child = GetChildWindow(hwnd, text.c_str());
+    if (child == NULL) {
+        return NULL;
+    }
+    WND parent = GetParentWindow(child);
+
+    return parent;
+}
+
+// Function to retrieve the handle of a specific window's child's sibling
+WND GetChildSiblingWindow(WND hwnd, string text) {
+    // Allocate memory for the sibling handle and get it from the window's child
+    WND child = GetChildWindow(hwnd, text.c_str());
+    if (child == NULL) {
+        return NULL;
+    }
+    WND sibling = GetSiblingWindow(child);
+
+    return sibling;
+}
+
+// Function to retrieve the handle of a specific window's parent's child's sibling
+WND GetParentChildSiblingWindow(WND hwnd, string text) {
+    // Allocate memory for the sibling handle and get it from the window's parent's child
+    WND child = GetChildWindow(GetParentWindow(hwnd), text.c_str());
+    if (child == NULL) {
+        return NULL;
+    }
+    WND sibling = GetSiblingWindow(GetParentChildWindow(hwnd, text), text.c_str());
+
+    return sibling;
+}
+
+// Function to retrieve the handle of a specific window's parent's child's sibling's parent
+WND GetParentChildSiblingParentWindow(WND hwnd, string text) {
+    // Allocate memory for the sibling handle and get it from the window's parent's child
+    WND child = GetChildWindow(GetParentWindow(hwnd), text.c_str());
+    if (child == NULL) {
+        return NULL;
+    }
+    WND sibling = GetSiblingWindow(GetParentChildWindow(hwnd, text), text.c_str());
+    if (sibling == NULL) {
+        return NULL;
+    }
+    WND parent = GetParentWindow(GetParentChildSiblingWindow(hwnd, text));
+
+    return parent;
+}
+
+// Function to retrieve the handle of a specific window's child's sibling's parent's child's sibling
+WND GetChildSiblingParentChildWindow(WND hwnd, string text) {
+    // Allocate memory for the child handle and get it from the window's sibling
+    WND sibling = GetSiblingWindow(hwnd, text.c_str());
+    if (sibling == NULL) {
+        return NULL;
+    }
+    WND child = GetChildWindow(GetSiblingParentWindow(hwnd, text), text.c_str());
+    if (child == NULL) {
+        return NULL;
+    }
+    WND sibling2 = GetSiblingWindow(GetParentChildWindow(hwnd, text), text.c_str());
+    if (sibling2 == NULL) {
+        return NULL;
+    }
+    WND child2 = GetChildWindow(GetParentChildSiblingWindo
